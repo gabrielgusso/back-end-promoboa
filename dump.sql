@@ -15,8 +15,7 @@ CREATE TABLE "users" (
 	"id" serial NOT NULL PRIMARY KEY,
 	"name" TEXT NOT NULL,
 	"email" TEXT NOT NULL,
-	"password" TEXT NOT NULL,
-	"picture" TEXT
+	"password" TEXT NOT NULL
 );
 
 
