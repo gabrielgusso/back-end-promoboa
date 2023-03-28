@@ -1,7 +1,6 @@
 import { connection } from '../config/database.js'
 import { QueryResult } from 'pg'
-import { UserData } from '../protocols.js'
-import { number } from 'joi'
+import { Session, UserData } from '../protocols.js'
 
 async function signUp(userData: CreateUser): Promise<QueryResult<CreateUser>> {
   const { email, password, name } = userData
@@ -21,10 +20,19 @@ async function findByEmail(email: string): Promise<QueryResult<UserData>> {
   return rows[0]
 }
 
-async function session(userId: number, token: string) {
+async function session(userId: number, token: string): Promise<QueryResult<Session>> {
   const { rows } = await connection.query(
     `INSERT INTO session (token, "userId") VALUES ($1, $2)`,
     [token, userId]
+  )
+
+  return rows[0]
+}
+
+async function getUser(userId: number): Promise<QueryResult<UserData>> {
+  const { rows } = await connection.query(
+    `SELECT * FROM users WHERE id=$1`,
+    [userId]
   )
 
   return rows[0]
@@ -37,7 +45,8 @@ export type UserEmail = Pick<CreateUser, 'email'>
 const authRepository = {
   signUp,
   findByEmail,
-  session
+  session,
+  getUser
 }
 
 export default authRepository

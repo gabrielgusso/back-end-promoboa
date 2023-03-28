@@ -10,6 +10,9 @@ export async function singUpPost(req: Request, res: Response) {
     return res.status(200).send(result)
   } catch (error) {
     if (error.name === 'Conflit') {
+      return res.status(409).send(error)
+    }
+    if (error.name === 'Unauthorized') {
       return res.status(401).send(error)
     }
     return res.status(400).send(error)
@@ -23,7 +26,7 @@ export async function singInPost(req: Request, res: Response) {
     const result = await authService.login(loginData)
     return res.status(200).send(result)
   } catch (error) {
-    if (error.name === 'Conflit') {
+    if (error.name === 'Unauthorized') {
       return res.status(401).send(error)
     }
     if (error.name === 'Not Found') {
@@ -33,6 +36,18 @@ export async function singInPost(req: Request, res: Response) {
   }
 }
 
-const test = 'test'
+export async function loginWithToken(req: Request, res: Response) {
+  const { authorization } = req.headers
+
+  try {
+    const result = await authService.getSession(authorization)
+    return res.status(200).send(result)
+  } catch (error) {
+    if (error.name === 'Unauthorized') {
+      return res.status(401).send(error)
+    }
+    return res.status(400).send(error)
+  }
+}
 
 export type LoginUser = Omit<CreateUser, 'name'>

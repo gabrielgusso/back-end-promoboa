@@ -45,11 +45,11 @@ async function validateUniqueEmailOrFail(email: string) {
   }
 }
 
-async function  getUserOrFail(email: string): Promise<UserData> {
+async function getUserOrFail(email: string): Promise<UserData> {
   const user = await authRepository.findByEmail(email)
   if (!user) {
     throw {
-      name: 'Not Found',
+      name: 'Unauthorized',
       message: 'Invalid email or password',
     }
   }
@@ -60,17 +60,56 @@ async function validatePasswordOrFail(password: string, userPassword: string) {
   const isPasswordValid = await bcrypt.compare(password, userPassword)
   if (!isPasswordValid) {
     throw {
-      name: 'Not Found',
+      name: 'Unauthorized',
       message: 'Invalid email or password',
     }
   }
 }
 
 async function createSession(userId: number) {
-  const token = jwt.sign({ userId }, process.env.JWT_SECRET)
+  const token: string = jwt.sign({ userId }, process.env.JWT_SECRET)
   await authRepository.session(userId, token)
 
   return token
+}
+
+async function getSession(authorization: string) {
+  if (!authorization) {
+    throw {
+      name: 'Unauthorized',
+      message: 'Authorization is required',
+    }
+  }
+
+  const parts = authorization.split(' ')
+
+  const [schema, token] = parts
+
+  if (schema !== 'Bearer') {
+    throw {
+      name: 'Unauthorized',
+      message: 'Bearer is required',
+    }
+  }
+
+  let userId: number
+
+  await jwt.verify(token, process.env.JWT_SECRET, async (error, decoded) => {
+    if (error) {
+      throw {
+        name: 'Unauthorized',
+        message: 'Token invalid',
+      }
+    } else {
+      userId = decoded.userId
+    }
+  })
+
+  const user = await authRepository.getUser(userId)
+
+  delete user.password
+
+  return user
 }
 
 export type LoginResult = {
@@ -81,6 +120,7 @@ export type LoginResult = {
 const authService = {
   createUser,
   login,
+  getSession,
 }
 
 export default authService

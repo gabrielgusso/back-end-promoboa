@@ -4,3 +4,9 @@ export type UserData = {
     email: string;
     password: string
 } 
+
+export type Session = {
+    id: number;
+    token: string;
+    userId: number;
+}
