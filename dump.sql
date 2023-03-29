@@ -5,7 +5,7 @@ CREATE TABLE "products" (
 	"url" TEXT NOT NULL,
 	"description" TEXT,
 	"store" TEXT NOT NULL,
-	"cupon" TEXT NOT NULL,
+	"coupon" TEXT NOT NULL,
 	"createdAt" timestamp with time zone NOT NULL DEFAULT 'NOW()'
 );
 

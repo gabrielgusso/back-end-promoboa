@@ -10,3 +10,14 @@ export type Session = {
     token: string;
     userId: number;
 }
+
+export type Product = {
+    id: number;
+    userId: number;
+    name: string;
+    url: string;
+    description: string;
+    store: string;
+    coupon: string
+    createdAt: string
+}
