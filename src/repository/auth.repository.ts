@@ -38,6 +38,15 @@ async function getUser(userId: number): Promise<QueryResult<UserData>> {
   return rows[0]
 }
 
+async function getSession(token: string): Promise<QueryResult<Session>> {
+  const { rows } = await connection.query(
+    `SELECT * FROM session WHERE token=$1`,
+    [token]
+  )
+
+  return rows[0]
+}
+
 export type CreateUser = Omit<UserData, 'id'>
 
 export type UserEmail = Pick<CreateUser, 'email'>
@@ -46,7 +55,8 @@ const authRepository = {
   signUp,
   findByEmail,
   session,
-  getUser
+  getUser,
+  getSession
 }
 
 export default authRepository

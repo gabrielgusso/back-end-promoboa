@@ -8,9 +8,10 @@ const server = express();
 server
 .use(express.json())
 .use(cors())
+.get("/health", (req, res) => res.send("Ok"))
 .use(authenticationRouter)
 .use(productsRouter)
-.get("/health", (req, res) => res.send("Ok"))
+
 
 server.listen(4000, () => {
   console.log("Server listening on port 4000");

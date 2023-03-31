@@ -5,10 +5,9 @@ import { loginWithToken, singInPost, singUpPost } from "../controllers/auth.cont
 
 export const authenticationRouter = Router()
 
-authenticationRouter.post("/sign-up", validateBody(createUserSchema), singUpPost)
-
-authenticationRouter.post("/sign-in", validateBody(loginSchema), singInPost)
-
-authenticationRouter.get("/sign-in", loginWithToken)
+authenticationRouter
+.post("/sign-up", validateBody(createUserSchema), singUpPost)
+.post("/sign-in", validateBody(loginSchema), singInPost)
+.get("/sign-in", loginWithToken)
 
 
