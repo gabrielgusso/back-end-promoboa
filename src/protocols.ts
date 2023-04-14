@@ -17,7 +17,12 @@ export type Product = {
     name: string;
     url: string;
     description: string;
+    image: string;
     store: string;
     coupon: string
+    normalPrice: number,
+    discountPrice: number,
     createdAt: string
 }
+
+export type ProductBody = Omit<Product, 'id' | 'userId' | 'createdAt'> 
