@@ -11,9 +11,15 @@ async function postProduct(productData: ProductBody, userId: number) {
   return await productsRepository.createProduct(product)
 }
 
+async function searchProducts(search: string) {
+  const products = await productsRepository.searcProduct(search)
+  return products
+}
+
 const productsService = {
   getProducts,
-  postProduct
+  postProduct,
+  searchProducts
 }
 
 export default productsService

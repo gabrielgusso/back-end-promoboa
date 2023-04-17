@@ -6,8 +6,8 @@ export async function singUpPost(req: Request, res: Response) {
   const userData = req.body as CreateUser
 
   try {
-    const result = await authService.createUser(userData)
-    return res.status(200).send(result)
+    await authService.createUser(userData)
+    return res.status(200).send('Cadastrado com sucesso!')
   } catch (error) {
     if (error.name === 'Conflit') {
       return res.status(409).send(error)

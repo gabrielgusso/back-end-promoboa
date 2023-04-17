@@ -17,8 +17,19 @@ export async function postProducts(req: AuthenticatedRequest, res: Response) {
   const productData = req.body as ProductBody
 
   try {
-    const result = await productsService.postProduct(productData, userId)
+    await productsService.postProduct(productData, userId)
     res.status(200).send("Ok")
+  } catch (error) {
+    res.status(400).send(error)
+  }
+}
+
+export async function searchProducts(req: Request, res: Response) {
+  const search = req.params.name
+
+  try {
+    const result = await productsService.searchProducts(search)
+    res.status(200).send(result)
   } catch (error) {
     res.status(400).send(error)
   }
