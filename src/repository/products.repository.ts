@@ -55,7 +55,7 @@ async function createProduct(
 
 export async function searcProduct(search: string) {
   const {rows}  = await connection.query(
-    `SELECT * FROM products WHERE name ILIKE $1`,
+    `SELECT * FROM products WHERE name ILIKE $1 ORDER BY id DESC`,
     [`%${search}%`]
   )
   return rows
